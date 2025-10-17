@@ -2,7 +2,7 @@ setup you must choose a random NTFY.SH topic and have your voip.ms did make a GE
 
 this is easily done in the DID Settings on voip.ms right in the area where you enable sms for a specific DID.
 
-https://ntfy.sh/mywebhook/publish?message=update
+```https://ntfy.sh/mywebhook/publish?message=update```
 
 in this example "mywebhook" is the topic you should choose something more random and more unuiqe
 
@@ -12,6 +12,8 @@ ntfy.sh never sees any of your messages, contacts, dids the only thing they see 
 
 build instructions
 
-./gradlew assembleFdroidFullRelease
+```./gradlew assembleFdroidFullRelease```
+
+note this will not be signed by fdroid it just signs using developer key 
 
 to build you must have jdk, gradle, python & android sdk 35
