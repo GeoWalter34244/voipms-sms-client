@@ -42,6 +42,9 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/> <!-- For instant delivery foregrounds service on SDK >= 34 -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/> <!-- Allows to ignore battery optimization without going to the settings -->
+
 
     <!-- Vibration when notification received -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -246,10 +249,7 @@
         <!-- Ntfy Listener Service (F-Droid only) -->
         <service
             android:name=".notifications.services.NtfyListenerService"
-            android:foregroundServiceType="shortService"
-            tools:ignore="Instantiatable"
-            android:enabled="true"
-            android:exported="false"
+            android:foregroundServiceType="specialUse"
          />
     </application>
 </manifest>

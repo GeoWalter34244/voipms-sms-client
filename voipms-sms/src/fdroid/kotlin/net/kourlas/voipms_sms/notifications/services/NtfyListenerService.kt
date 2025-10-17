@@ -65,9 +65,13 @@ class NtfyListenerService : Service() {
     private var isConnected = false
     private var reconnectJob: Job? = null
     private var wakeLock: PowerManager.WakeLock? = null
+    private var connectionAttempts = 0
     
     private val okHttpClient = OkHttpClient.Builder()
         .readTimeout(0, TimeUnit.MILLISECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .pingInterval(30, TimeUnit.SECONDS)
         .build()
     
     private val moshi = Moshi.Builder().build()
@@ -139,10 +143,13 @@ class NtfyListenerService : Service() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "Ntfy Listener",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_MIN
             ).apply {
                 description = "Maintains connection to ntfy.sh for push notifications"
                 setShowBadge(false)
+                enableLights(false)
+                enableVibration(false)
+                setSound(null, null)
             }
             
             val notificationManager = getSystemService(NotificationManager::class.java)
@@ -163,7 +170,9 @@ class NtfyListenerService : Service() {
             .setSmallIcon(R.drawable.ic_message_sync_toolbar_24dp)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
             .build()
     }
     
@@ -196,6 +205,14 @@ class NtfyListenerService : Service() {
             return
         }
         
+        // Prevent duplicate connections
+        if (webSocket != null && isConnected) {
+            return
+        }
+        
+        // Close any existing connection first
+        webSocket?.close(1000, "Reconnecting")
+        
         val request = Request.Builder()
             .url("wss://ntfy.sh/$topic/ws")
             .build()
@@ -203,6 +220,7 @@ class NtfyListenerService : Service() {
         webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 isConnected = true
+                connectionAttempts = 0 // Reset on successful connection
                 updateNotification()
             }
             
@@ -231,19 +249,23 @@ class NtfyListenerService : Service() {
     
     private fun handleNtfyMessage(message: String) {
         try {
-            // Parse ntfy message (even though we don't use the content)
             val adapter = moshi.adapter(NtfyMessage::class.java)
             val ntfyMessage = adapter.fromJson(message)
+            
+            // Only sync on actual message events, not keepalive or open events
+            val event = ntfyMessage?.event
+            if (event != null && event != "message") {
+                // Ignore keepalive, open, and other non-message events
+                return
+            }
             
             // Trigger sync with VoIP.ms to fetch new messages
             if (Notifications.getInstance(this).getNotificationsEnabled()) {
                 SyncWorker.performPartialSynchronization(this)
             }
         } catch (e: Exception) {
-            // Ignore parsing errors - we just need to know a message arrived
-            if (Notifications.getInstance(this).getNotificationsEnabled()) {
-                SyncWorker.performPartialSynchronization(this)
-            }
+            // On parsing errors, don't sync to avoid false positives
+            // Log the error for debugging
         }
     }
     
@@ -254,13 +276,18 @@ class NtfyListenerService : Service() {
         
         reconnectJob?.cancel()
         reconnectJob = serviceScope.launch {
-            var delay = RECONNECT_DELAY_MS
-            while (isActive && getNtfyPersistentConnection(this@NtfyListenerService)) {
-                delay(delay)
-                if (isActive) {
-                    connectWebSocket()
-                    delay = minOf(delay * 2, MAX_RECONNECT_DELAY_MS)
-                }
+            connectionAttempts++
+            
+            // Exponential backoff: 5s, 10s, 20s, 40s, 60s (max)
+            val delay = minOf(
+                RECONNECT_DELAY_MS * (1 shl (connectionAttempts - 1)),
+                MAX_RECONNECT_DELAY_MS
+            )
+            
+            delay(delay)
+            
+            if (isActive && getNtfyPersistentConnection(this@NtfyListenerService)) {
+                connectWebSocket()
             }
         }
     }
