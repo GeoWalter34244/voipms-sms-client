@@ -7,4 +7,4 @@ the app will watch the topic and any time "update" is seen on the topic configur
 
 ```./gradlew assembleFdroidFullRelease```
 
-to build you must have jdk, gradle & android sdk 35
+to build you must have jdk, gradle, python & android sdk 35
