@@ -33,4 +33,20 @@
         android:icon="@android:color/transparent"
         android:key="@string/preferences_notifications_vibrate_key"
         android:title="@string/preferences_notifications_vibrate_title" />
+    
+    <!-- Ntfy preferences (F-Droid only) -->
+    <androidx.preference.EditTextPreference
+        android:dependency="@string/preferences_notifications_enable_key"
+        android:icon="@android:color/transparent"
+        android:key="@string/preferences_ntfy_topic_key"
+        android:title="@string/preferences_ntfy_topic_title"
+        android:summary="@string/preferences_ntfy_topic_summary"
+        android:defaultValue="@string/preferences_ntfy_topic_default_value" />
+    <androidx.preference.SwitchPreference
+        android:dependency="@string/preferences_notifications_enable_key"
+        android:icon="@android:color/transparent"
+        android:key="@string/preferences_ntfy_persistent_connection_key"
+        android:title="@string/preferences_ntfy_persistent_connection_title"
+        android:summary="@string/preferences_ntfy_persistent_connection_summary"
+        android:defaultValue="@string/preferences_ntfy_persistent_connection_default_value" />
 </androidx.preference.PreferenceScreen>

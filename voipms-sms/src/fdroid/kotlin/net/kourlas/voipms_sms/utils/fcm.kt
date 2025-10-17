@@ -19,29 +19,67 @@ package net.kourlas.voipms_sms.utils
 
 import android.content.Context
 import androidx.fragment.app.FragmentActivity
+import net.kourlas.voipms_sms.BuildConfig
+import net.kourlas.voipms_sms.R
+import net.kourlas.voipms_sms.notifications.Notifications
+import net.kourlas.voipms_sms.notifications.services.NtfyListenerService
+import net.kourlas.voipms_sms.notifications.workers.NotificationsRegistrationWorker
+import net.kourlas.voipms_sms.preferences.didsConfigured
+import net.kourlas.voipms_sms.preferences.getDids
+import net.kourlas.voipms_sms.preferences.getNtfyTopic
+import net.kourlas.voipms_sms.preferences.setSetupCompletedForVersion
 
 /**
- * Stub for F-Droid builds.
+ * Returns a placeholder for F-Droid builds (no Firebase installation ID).
  */
 fun getInstallationId(): String {
-    return "Not supported"
+    return "F-Droid (ntfy.sh)"
 }
 
 /**
- * Stub for F-Droid builds.
+ * Subscribes to ntfy topics for the currently configured DIDs.
+ * For F-Droid builds, this starts the NtfyListenerService instead of subscribing to FCM topics.
  */
-@Suppress("UNUSED_PARAMETER")
 fun subscribeToDidTopics(context: Context) {
-    // Do nothing.
+    // Start ntfy service if notifications are enabled and topic is configured
+    if (Notifications.getInstance(context).getNotificationsEnabled() && 
+        getNtfyTopic(context).isNotBlank()) {
+        NtfyListenerService.startService(context)
+    }
 }
 
 /**
- * Stub for F-Droid builds.
+ * Attempt to enable push notifications using ntfy.sh for F-Droid builds.
  */
-@Suppress("UNUSED_PARAMETER")
 fun enablePushNotifications(
     context: Context,
     activityToShowError: FragmentActivity? = null
 ) {
-    // Do nothing.
+    // Check if DIDs are configured and that notifications are enabled,
+    // and silently quit if not
+    if (!didsConfigured(context)
+        || !Notifications.getInstance(context).getNotificationsEnabled()
+    ) {
+        setSetupCompletedForVersion(context, BuildConfig.VERSION_CODE.toLong())
+        return
+    }
+
+    // Check if ntfy topic is configured
+    val topic = getNtfyTopic(context)
+    if (topic.isBlank()) {
+        if (activityToShowError != null) {
+            showSnackbar(
+                activityToShowError, R.id.coordinator_layout,
+                "Please configure ntfy topic in notification settings"
+            )
+        }
+        setSetupCompletedForVersion(context, BuildConfig.VERSION_CODE.toLong())
+        return
+    }
+
+    // Start ntfy service
+    subscribeToDidTopics(context)
+
+    // Start push notifications registration service
+    NotificationsRegistrationWorker.registerForPushNotifications(context)
 }

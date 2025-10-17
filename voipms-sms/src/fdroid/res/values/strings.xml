@@ -22,7 +22,10 @@
     <string name="preferences_dids_info">The phone numbers you wish to use with this app must have SMS enabled. Otherwise, they will not appear in this list. Use the VoIP.ms &lt;a href="https://voip.ms/m/managedid.php"&gt;phone number configuration menu&lt;/a&gt; to enable SMS for your phone numbers.</string>
 
     <!-- Synchronization -->
-    <string name="preferences_sync_info">Since you are using the F-Droid version of the app, it is necessary to set a synchronization interval to retrieve new messages.</string>
+    <string name="preferences_sync_info">Since you are using the F-Droid version of the app, it is necessary to set a synchronization interval to retrieve new messages. Alternatively, you can use ntfy.sh for real-time push notifications.</string>
+    
+    <!-- Notifications -->
+    <string name="preferences_notifications_enable_summary">Show notifications when new messages are received. Configure ntfy.sh topic and manually set VoIP.ms callback URL for real-time notifications.</string>
 
     <!-- ACTIVITIES -->
 

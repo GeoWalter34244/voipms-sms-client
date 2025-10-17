@@ -2,9 +2,9 @@
 
 This privacy policy is in reference to:
 
-* the app "[VoIP.ms SMS](https://github.com/michaelkourlas/voipms-sms-client)",
+- the app "[VoIP.ms SMS](https://github.com/michaelkourlas/voipms-sms-client)",
   hosted on the Google Play and F-Droid app stores; and
-* the developer "Michael Kourlas".
+- the developer "Michael Kourlas".
 
 The purpose of this policy is to comprehensively disclose how the app accesses,
 collects, uses, and shares user data.
@@ -13,10 +13,10 @@ collects, uses, and shares user data.
 
 The app collects and uses:
 
-* your VoIP.ms credentials;
-* the DIDs in your VoIP.ms account;
-* SMS/MMS messages sent or received using VoIP.ms; and
-* metadata associated with each such SMS/MMS message, including the ID
+- your VoIP.ms credentials;
+- the DIDs in your VoIP.ms account;
+- SMS/MMS messages sent or received using VoIP.ms; and
+- metadata associated with each such SMS/MMS message, including the ID
   assigned to each message by VoIP.ms, the date and time the message was sent,
   and the source and destination phone numbers.
 
@@ -34,8 +34,7 @@ section is essential to implement the app's core functionality.
 
 ## Data collected to implement push notifications
 
-This section only applies to the Google Play version of the app, not the
-F-Droid version of the app.
+### Google Play version
 
 If you enable notifications, the app automatically configures your VoIP.ms
 account to
@@ -71,6 +70,25 @@ of the app and contact Michael Kourlas for assistance.
 
 The collection, usage, storage, and sharing of your DID as described in this
 section is essential to implement the app's support for push notifications.
+
+### F-Droid version
+
+The F-Droid version uses ntfy.sh for push notifications instead of Firebase.
+When you enable notifications and configure an ntfy topic, you must manually
+configure your VoIP.ms account to send callbacks directly to `https://ntfy.sh/<your-topic>`.
+
+The app maintains a WebSocket connection to ntfy.sh to receive these notifications.
+No message content is sent through ntfy.sh - only a simple ping that triggers
+the app to fetch messages from VoIP.ms API.
+
+Your ntfy topic name is stored locally on your device and is not shared with
+any third parties except ntfy.sh (which only receives the topic name, not
+message content). The topic name is used solely to establish the WebSocket
+connection for receiving notification triggers.
+
+No personal data is collected or stored by ntfy.sh beyond the topic name you
+choose. All actual message content is fetched directly from VoIP.ms API,
+maintaining end-to-end privacy.
 
 ## Contact information
 

@@ -6,10 +6,6 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("net.kourlas.oss-licenses-plugin")
-
-    // fdroid-remove-start
-    id("com.google.gms.google-services")
-    // fdroid-remove-end
 }
 
 android {
@@ -29,12 +25,6 @@ android {
     flavorDimensions += "version"
     flavorDimensions += "demo"
     productFlavors {
-        // fdroid-remove-start
-        create("primary") {
-            dimension = "version"
-            buildConfigField("boolean", "IS_FDROID", "false")
-        }
-        // fdroid-remove-end
         create("fdroid") {
             dimension = "version"
             versionNameSuffix = "-fdroid"
@@ -86,11 +76,6 @@ android {
     sourceSets.getByName("main") {
         java.srcDir("src/main/kotlin")
     }
-    // fdroid-remove-start
-    sourceSets.getByName("primary") {
-        java.srcDir("src/primary/kotlin")
-    }
-    // fdroid-remove-end
     sourceSets.getByName("fdroid") {
         java.srcDir("src/fdroid/kotlin")
     }
@@ -98,6 +83,20 @@ android {
         abortOnError = false
     }
     namespace = "net.kourlas.voipms_sms"
+   
+    buildTypes {
+        debug {
+            isDebuggable = true
+            isMinifyEnabled = false
+        }
+        release {
+            isDebuggable = false
+            isMinifyEnabled = false
+            // Use debug signing key for release builds
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+
 }
 
 dependencies {
@@ -123,15 +122,6 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.10.0")
     implementation("com.google.android.material:material:1.12.0")
     ksp("androidx.room:room-compiler:$roomVersion")
-
-    // fdroid-remove-start
-
-    // Google and Firebase libraries
-    "primaryImplementation"("com.google.android.gms:play-services-base:18.5.0")
-    "primaryImplementation"(platform("com.google.firebase:firebase-bom:33.8.0"))
-    "primaryImplementation"("com.google.firebase:firebase-messaging-ktx")
-
-    // fdroid-remove-end
 
     // Other third-party libraries
     implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")

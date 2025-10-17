@@ -34,7 +34,12 @@
     </androidx.preference.Preference>
     <androidx.preference.Preference
         android:icon="@drawable/ic_message_settings_24dp"
-        android:title="@string/preferences_notifications_category_name" />
+        android:title="@string/preferences_notifications_category_name"
+        android:summary="@string/preferences_notifications_system_settings_summary">
+        <intent
+            android:action="android.settings.APP_NOTIFICATION_SETTINGS"
+            android:data="package:net.kourlas.voipms_sms" />
+    </androidx.preference.Preference>
     <androidx.preference.Preference
         android:icon="@drawable/ic_sync_settings_24dp"
         android:title="@string/preferences_sync_category_name">

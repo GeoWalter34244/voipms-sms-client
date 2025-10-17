@@ -242,5 +242,14 @@
             android:foregroundServiceType="shortService"
             tools:ignore="Instantiatable"
             tools:node="merge" />
+        
+        <!-- Ntfy Listener Service (F-Droid only) -->
+        <service
+            android:name=".notifications.services.NtfyListenerService"
+            android:foregroundServiceType="shortService"
+            tools:ignore="Instantiatable"
+            android:enabled="true"
+            android:exported="false"
+         />
     </application>
 </manifest>

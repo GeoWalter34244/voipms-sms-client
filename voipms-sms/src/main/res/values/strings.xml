@@ -51,6 +51,7 @@
     <string name="preferences_sync_category_name">Synchronization</string>
     <string name="preferences_sync_interval_key" translatable="false">sync_interval</string>
     <string name="preferences_sync_interval_title">Synchronization interval</string>
+    <string name="preferences_sync_interval_summary_fallback">Fallback synchronization interval (only used when push notifications are disabled). For real-time notifications, use ntfy.sh in the Notifications settings.</string>
     <string name="preferences_sync_interval_default_value" translatable="false">0</string>
     <string name="preferences_sync_start_date_key" translatable="false">start_date</string>
     <string name="preferences_sync_start_date_title">Synchronization start date</string>
@@ -65,6 +66,7 @@
 
     <!-- Notifications -->
     <string name="preferences_notifications_category_name">Notifications</string>
+    <string name="preferences_notifications_system_settings_summary">Open system notification settings</string>
     <string name="preferences_notifications_enable_key" translatable="false">sms_notification_basic</string>
     <string name="preferences_notifications_enable_title">Notifications</string>
     <string name="preferences_notifications_enable_summary">Show notifications when new messages are received</string>
@@ -78,6 +80,17 @@
     <string name="preferences_notifications_vibrate_key" translatable="false">sms_notification_vibrate</string>
     <string name="preferences_notifications_vibrate_title">Vibrate</string>
     <string name="preferences_notifications_vibrate_default_value" translatable="false">true</string>
+    
+    <!-- Ntfy preferences -->
+    <string name="preferences_ntfy_topic_key" translatable="false">ntfy_topic</string>
+    <string name="preferences_ntfy_topic_title">Ntfy Topic</string>
+    <string name="preferences_ntfy_topic_summary">Topic name for ntfy.sh notifications (e.g., my-voipms-sms-12345)</string>
+    <string name="preferences_ntfy_topic_default_value" translatable="false">voipms-sms</string>
+    <string name="preferences_ntfy_persistent_connection_key" translatable="false">ntfy_persistent_connection</string>
+    <string name="preferences_ntfy_persistent_connection_title">Persistent Connection</string>
+    <string name="preferences_ntfy_persistent_connection_summary">Keep WebSocket connection active in background (uses more battery)</string>
+    <string name="preferences_ntfy_persistent_connection_default_value" translatable="false">false</string>
+    <string name="preferences_ntfy_category_title">Push Notifications (ntfy.sh)</string>
 
     <!-- Appearance -->
     <string name="preferences_appearance_category_name">Appearance</string>
@@ -263,6 +276,8 @@
     <!-- WORKERS -->
 
     <!-- PushNotificationsRegistrationWorker -->
+    <string name="push_notifications_work_id" translatable="false">net.kourlas.voipms_sms.PUSH_NOTIF_WORK_ID</string>
+    <string name="push_notifications_fail_google_play">Register failed: Google Play Services unavailable</string>
     <string name="push_notifications_fail_register">Register failed: VoIP.ms callback registration failed</string>
     <string name="push_notifications_fail_unknown">Register failed: unknown error</string>
 

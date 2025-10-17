@@ -24,6 +24,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import net.kourlas.voipms_sms.R
+import net.kourlas.voipms_sms.notifications.services.NtfyListenerService
 import net.kourlas.voipms_sms.preferences.getStartDate
 import net.kourlas.voipms_sms.preferences.setStartDate
 import net.kourlas.voipms_sms.sms.workers.SyncWorker
@@ -123,6 +124,18 @@ class SynchronizationPreferencesFragment : PreferenceFragmentCompat(),
         // this check is therefore required to prevent a crash
         if (isAdded && key != null) {
             updateSummary(findPreference(key))
+            
+            // Handle ntfy preference changes
+            when (key) {
+                getString(R.string.preferences_ntfy_topic_key),
+                getString(R.string.preferences_ntfy_persistent_connection_key) -> {
+                    // Restart ntfy service when topic or persistence setting changes
+                    context?.let { ctx ->
+                        NtfyListenerService.stopService(ctx)
+                        NtfyListenerService.startService(ctx)
+                    }
+                }
+            }
         }
     }
 

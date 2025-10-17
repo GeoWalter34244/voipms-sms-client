@@ -1,21 +1,22 @@
 ## Contents
 
-* [Account](#account)
-* [Phone numbers](#phone-numbers)
-* [Notifications](#notifications)
-* [Synchronization](#synchronization)
-* [Network](#network)
-* [Database](#database)
-* [Reporting bugs](#reporting-bugs)
-* [Contacting the developer](#contacting-the-developer)
+- [Account](#account)
+- [Phone numbers](#phone-numbers)
+- [Notifications](#notifications)
+- [Synchronization](#synchronization)
+- [Network](#network)
+- [Database](#database)
+- [Reporting bugs](#reporting-bugs)
+- [Contacting the developer](#contacting-the-developer)
 
 ## Account
 
 This app requires access to the VoIP.ms API in order to retrieve messages from your VoIP.ms account. Go to the VoIP.ms [API Configuration menu](https://www.voip.ms/m/api.php) and:
-* enable API access for your VoIP.ms account;
-* set an API password (which is **distinct** from your account password); and
-* set the list of approved IP addresses to "0.0.0.0".
-  
+
+- enable API access for your VoIP.ms account;
+- set an API password (which is **distinct** from your account password); and
+- set the list of approved IP addresses to "0.0.0.0".
+
 When signing in, you must the email you use to sign into the VoIP.ms portal (**not** your SIP username) and the API password which you set above.
 
 ## Phone numbers
@@ -30,15 +31,18 @@ You can hide messages from the conversations view, block the retrieval of messag
 
 ### Push notifications
 
+#### Google Play version
+
 The Google Play version of the app supports push notifications using Firebase
 Cloud Messaging. Push notifications are automatically configured when selecting
 phone numbers if notifications are enabled.
 
 However, if push notifications don't appear to be working, it's possible that
 the automatic configuration failed. You can configure them manually by:
-* accessing the settings for your phone numbers (DIDs) on the VoIP.ms [Manage DID menu](https://voip.ms/m/managedid.php);
-* enabling the *SMS URL Callback* option; and
-* entering the following URL into the neighbouring
+
+- accessing the settings for your phone numbers (DIDs) on the VoIP.ms [Manage DID menu](https://voip.ms/m/managedid.php);
+- enabling the _SMS URL Callback_ option; and
+- entering the following URL into the neighbouring
   field: [https://voipmssms-notify.kourlas.com/?did={TO}](https://voipmssms-notify.kourlas.com/?did={TO})
 
 If push notifications were configured correctly, VoIP.ms will send a callback to
@@ -47,17 +51,37 @@ message. The Worker will then forward the callback to your device using
 Firebase Cloud Messaging. When the app receives the callback, it performs a
 synchronization with the VoIP.ms servers and retrieves the text message.
 
-To protect your privacy, the callback is configured to **only** include your
-phone number. It does not include the text of individual messages.
+#### F-Droid version
 
-### Regular notifications
+The F-Droid version of the app supports push notifications using ntfy.sh, a
+privacy-focused notification service. To set up push notifications:
 
-If push notifications were not configured correctly or if you are using the
-F-Droid version of the app, you will still receive notifications whenever a new
-message is received during synchronization with the VoIP.ms servers if
-notifications are enabled.
+1. **Configure ntfy topic**: Go to Settings → Notifications and enter a unique
+   topic name (e.g., `my-voipms-sms-12345`). This topic will be used to receive
+   notifications from ntfy.sh.
 
-This can be a reasonable substitute for push notifications if automatic synchronization is enabled, though obviously this solution consumes more battery life.
+2. **Enable persistent connection** (optional): Toggle "Persistent Connection" to
+   keep the WebSocket connection active in the background for instant notifications.
+   Note: This uses more battery but provides faster notifications.
+
+3. **Configure VoIP.ms callback**: You must manually configure your VoIP.ms
+   account to send callbacks to `https://ntfy.sh/<your-topic>` when messages
+   are received. Go to the VoIP.ms [Manage DID menu](https://voip.ms/m/managedid.php),
+   enable the _SMS URL Callback_ option, and enter `https://ntfy.sh/<your-topic>`
+   as the callback URL.
+
+When a message is received, VoIP.ms sends a simple ping to your ntfy topic,
+which triggers the app to fetch the actual message content from VoIP.ms API.
+This ensures your message content never passes through ntfy.sh servers.
+
+#### Regular notifications
+
+If push notifications were not configured correctly, you will still receive
+notifications whenever a new message is received during synchronization with
+the VoIP.ms servers if notifications are enabled.
+
+This can be a reasonable substitute for push notifications if automatic
+synchronization is enabled, though obviously this solution consumes more battery life.
 
 ## Synchronization
 
@@ -108,8 +132,9 @@ This option exports the database to a specified file. This allows you to make ba
 ### Clean up database
 
 This option allows you to remove certain data from the database that might be considered outdated or no longer useful, such as:
-* metadata associated with deleted messages, which is stored to prevent the app from downloading deleted messages again; and
-* messages and metadata associated with a phone number (DID) you no longer use, which is stored in case you start using this phone number again.
+
+- metadata associated with deleted messages, which is stored to prevent the app from downloading deleted messages again; and
+- messages and metadata associated with a phone number (DID) you no longer use, which is stored in case you start using this phone number again.
 
 ### Delete database
 

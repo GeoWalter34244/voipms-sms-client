@@ -22,7 +22,8 @@
         android:entryValues="@array/preferences_sync_interval_values"
         android:icon="@android:color/transparent"
         android:key="@string/preferences_sync_interval_key"
-        android:title="@string/preferences_sync_interval_title" />
+        android:title="@string/preferences_sync_interval_title"
+        android:summary="@string/preferences_sync_interval_summary_fallback" />
     <androidx.preference.Preference
         android:icon="@android:color/transparent"
         android:key="@string/preferences_sync_start_date_key"
@@ -39,4 +40,28 @@
         android:key="@string/preferences_sync_retrieve_deleted_messages_key"
         android:summary="@string/preferences_sync_retrieve_deleted_messages_summary"
         android:title="@string/preferences_sync_retrieve_deleted_messages_title" />
+    
+    <!-- Ntfy push notification settings -->
+    <androidx.preference.PreferenceCategory
+        android:title="@string/preferences_ntfy_category_title" />
+    <androidx.preference.SwitchPreference
+        android:defaultValue="@string/preferences_notifications_enable_default_value"
+        android:icon="@android:color/transparent"
+        android:key="@string/preferences_notifications_enable_key"
+        android:summary="@string/preferences_notifications_enable_summary"
+        android:title="@string/preferences_notifications_enable_title" />
+    <androidx.preference.EditTextPreference
+        android:dependency="@string/preferences_notifications_enable_key"
+        android:icon="@android:color/transparent"
+        android:key="@string/preferences_ntfy_topic_key"
+        android:title="@string/preferences_ntfy_topic_title"
+        android:summary="@string/preferences_ntfy_topic_summary"
+        android:defaultValue="@string/preferences_ntfy_topic_default_value" />
+    <androidx.preference.SwitchPreference
+        android:dependency="@string/preferences_notifications_enable_key"
+        android:icon="@android:color/transparent"
+        android:key="@string/preferences_ntfy_persistent_connection_key"
+        android:title="@string/preferences_ntfy_persistent_connection_title"
+        android:summary="@string/preferences_ntfy_persistent_connection_summary"
+        android:defaultValue="@string/preferences_ntfy_persistent_connection_default_value" />
 </androidx.preference.PreferenceScreen>

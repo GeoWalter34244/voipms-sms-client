@@ -8,10 +8,6 @@ buildscript {
         classpath("com.android.tools.build:gradle:8.8.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0")
         classpath("com.github.michaelkourlas:oss-licenses-plugin:0.0.2")
-
-        // fdroid-remove-start
-        classpath("com.google.gms:google-services:4.4.2")
-        // fdroid-remove-end
     }
 }
 

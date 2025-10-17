@@ -463,6 +463,37 @@ fun setRawSyncInterval(context: Context, string: String) {
     )
 }
 
+// Ntfy preferences
+fun getNtfyTopic(context: Context): String =
+    getStringPreference(
+        context,
+        context.getString(R.string.preferences_ntfy_topic_key),
+        context.getString(R.string.preferences_ntfy_topic_default_value)
+    )
+
+fun setNtfyTopic(context: Context, topic: String) {
+    setStringPreference(
+        context,
+        context.getString(R.string.preferences_ntfy_topic_key),
+        topic
+    )
+}
+
+fun getNtfyPersistentConnection(context: Context): Boolean =
+    getBooleanPreference(
+        context,
+        context.getString(R.string.preferences_ntfy_persistent_connection_key),
+        context.getString(R.string.preferences_ntfy_persistent_connection_default_value).toBoolean()
+    )
+
+fun setNtfyPersistentConnection(context: Context, enabled: Boolean) {
+    setBooleanPreference(
+        context,
+        context.getString(R.string.preferences_ntfy_persistent_connection_key),
+        enabled
+    )
+}
+
 @Suppress("SameParameterValue")
 private fun getSecureStringPreference(
     context: Context, key: String,
